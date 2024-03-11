@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 import "@/assets/styles/app.css";
-
-const roboto = Roboto({ weight: "500", subsets: ["latin"] });
+import StoreProvider from "./components/StoreProvider";
 
 export const metadata: Metadata = {
   title: "Todo List",
@@ -17,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body>
+        <StoreProvider>{children}</StoreProvider>
+      </body>
     </html>
   );
 }
