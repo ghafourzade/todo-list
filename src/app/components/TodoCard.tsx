@@ -1,5 +1,6 @@
 "use client";
 import { type ChangeEvent, useCallback } from "react";
+
 import { Box, Card, Checkbox, IconButton, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -10,12 +11,14 @@ import { useAppDispatch } from "@/lib/hooks";
 
 export default function TodoCard(props: { todo: TodoItem }) {
   const dispatch = useAppDispatch();
+
   const doneChangeHandler = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch(todoActions.editTodo({ ...props.todo, done: event.target.checked }));
-    },
+    (event: ChangeEvent<HTMLInputElement>) => dispatch(todoActions.editTodo({ ...props.todo, done: event.target.checked })),
     [dispatch, props.todo]
   );
+  const deleteClickHandler = useCallback(() => dispatch(todoActions.deleteTodo(props.todo.id)), [dispatch, props.todo.id]);
+  const editClickHandler = useCallback(() => dispatch(todoActions.openTodoModal(props.todo)), [dispatch, props.todo]);
+
   return (
     <Card variant="outlined" sx={{ display: "flex", alignItems: "start", gap: 1, p: 1 }}>
       <Checkbox checked={props.todo.done} onChange={doneChangeHandler} />
@@ -31,10 +34,10 @@ export default function TodoCard(props: { todo: TodoItem }) {
             </Typography>
           </Box>
           <Box>
-            <IconButton>
+            <IconButton onClick={deleteClickHandler}>
               <DeleteIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={editClickHandler}>
               <EditIcon />
             </IconButton>
           </Box>
