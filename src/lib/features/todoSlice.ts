@@ -7,8 +7,12 @@ export type TodoItem = {
   date: number;
 };
 
-const initialState: { todos: TodoItem[]; todoModal: { open: boolean; todo: TodoItem | null } } = {
+type InitialState = { todos: TodoItem[]; viewTodos: TodoItem[]; search: string; todoModal: { open: boolean; todo: TodoItem | null } };
+
+const initialState: InitialState = {
   todos: [],
+  viewTodos: [],
+  search: "",
   todoModal: { open: false, todo: null },
 };
 
@@ -18,8 +22,6 @@ const todo = createSlice({
   name: "todo",
   initialState,
   reducers: {
-    openTodoModal: (state, action: PayloadAction<TodoItem | null>) => ({ ...state, todoModal: { open: true, todo: action.payload } }),
-    closeTodoModal: (state) => ({ ...state, todoModal: initialState.todoModal }),
     addTodo: (state, action: PayloadAction<TodoItem>) => ({ ...state, todos: [...state.todos, action.payload].sort(sortByDate) }),
     editTodo: (state, action: PayloadAction<TodoItem>) => ({
       ...state,
@@ -28,6 +30,20 @@ const todo = createSlice({
     deleteTodo: (state, action: PayloadAction<number>) => ({
       ...state,
       todos: state.todos.filter((c) => c.id !== action.payload).sort(sortByDate),
+    }),
+    openTodoModal: (state, action: PayloadAction<TodoItem | null>) => ({ ...state, todoModal: { open: true, todo: action.payload } }),
+    closeTodoModal: (state) => ({ ...state, todoModal: initialState.todoModal }),
+    searchTodo: (state, action: PayloadAction<string>) => ({
+      ...state,
+      search: action.payload,
+    }),
+    setViewTodos: (state, action: PayloadAction<TodoItem[]>) => ({
+      ...state,
+      viewTodos: action.payload,
+    }),
+    setTodos: (state, action: PayloadAction<TodoItem[]>) => ({
+      ...state,
+      todos: action.payload,
     }),
   },
 });

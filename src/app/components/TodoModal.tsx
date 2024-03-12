@@ -4,7 +4,7 @@ import { Card, Container, Modal, Typography, TextField, FormControlLabel, Checkb
 import SaveIcon from "@mui/icons-material/Save";
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { type TodoItem, todoActions } from "@/lib/features/todoSlice";
+import { todoActions } from "@/lib/features/todoSlice";
 
 const initialFormData = {
   desc: {
@@ -15,6 +15,8 @@ const initialFormData = {
   compeleted: false,
 };
 
+const descValidation = (value: string) => value.trim() !== "";
+
 export default function TodoModal() {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.todoReducer.todoModal.open);
@@ -23,7 +25,7 @@ export default function TodoModal() {
 
   useEffect(() => {
     if (!todo) return;
-    setFormData((c) => ({ compeleted: todo.done, desc: { ...c.desc, value: todo.text } }));
+    setFormData((c) => ({ compeleted: todo.done, desc: { ...c.desc, value: todo.text, valid: descValidation(todo.text) } }));
   }, [todo]);
 
   const closeHandler = useCallback(() => {
@@ -58,9 +60,10 @@ export default function TodoModal() {
 
   const descriptionChangeHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) =>
-      setFormData((c) => ({ ...c, desc: { ...c.desc, value: event.target.value, valid: event.target.value.trim() !== "" } })),
+      setFormData((c) => ({ ...c, desc: { ...c.desc, value: event.target.value, valid: descValidation(event.target.value) } })),
     []
   );
+
   return (
     <Modal open={open} onClose={closeHandler}>
       <Container sx={{ pt: 3 }}>
