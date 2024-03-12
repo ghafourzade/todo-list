@@ -11,7 +11,9 @@ import { todoActions } from "@/lib/features/todoSlice";
 export default function TodoHeader() {
   const dispatch = useAppDispatch();
   const newTaskClickHandler = useCallback(() => dispatch(todoActions.openTodoModal(null)), [dispatch]);
-  const filterTaskClickHandler = useCallback(() => {}, []);
+  const filterTaskClickHandler = useCallback(() => {
+    alert("coming soon ;)");
+  }, []);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Typography variant="h4" component="h1">
